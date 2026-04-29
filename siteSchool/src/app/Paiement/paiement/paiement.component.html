@@ -1,99 +1,152 @@
+
+
+
 <section class="section">
-    <form class="w-100 col-12 col-lg-6 col-md-6 m-auto p-5 shadow raduis" #form="ngForm" (ngSubmit)="rechercheForm(form)">
-        <fieldset>
-            <legend>{{nomEtablissement}}</legend>
+  <!-- Overlay Chargement -->
+<div class="loading-overlay" *ngIf="loading">
+  <div class="spinner-border text-light" role="status"></div>
+  <p class="mt-3 text-white fw-semibold">Chargement en cours...</p>
+</div>
+  
+  <!-- Bouton retour en haut -->
+  <button 
+    *ngIf="isButtonVisible"
+    class="btn btn-dark rounded-circle shadow-lg"
+    (click)="scrollToTop()"
+    style="position: fixed; bottom: 40px; right: 30px; z-index: 1050; width: 50px; height: 50px;">
+    ↑
+  </button>
 
-            <label for="disabledSelect" class="form-label mt-3" style="font-size: 15px;">Code de l'etablissement</label>
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text" id="addon-wrapping">#</span>
-                <input type="text" class="form-control" name="CodeEcole" ngModel [(ngModel)]="CodeEcole" [readOnly]="true" aria-label="Username" aria-describedby="addon-wrapping">
+  <form class="w-100 col-12 col-lg-6 col-md-6 m-auto p-2 p-md-4 p-lg-5 shadow raduis" #form="ngForm" (ngSubmit)="rechercheForm(form)">
+    <fieldset>
+      <fieldset class=" container p-4 rounded-4 shadow-sm border" style="background-color: #ffffff;">
+        
+        <legend class="mb-4 h5 text-dark">{{ nomEtablissement }} ({{CodeEcole}})</legend>
+ <div class="mb-3">
+          <label for="codeEcole" class="form-label" style="color: #000000;"></label>
+          <input 
+  type="hidden"
+  name="CodeEcole"
+  [(ngModel)]="CodeEcole">
+        </div>
+       <div class="row g-3 mt-2">
+  
+  <div class="col-12 col-md-6">
+    <input 
+      type="text" 
+      id="nomEleve" 
+      name="Nom" 
+      class="form-control bg-light text-dark border-0" 
+      ngModel 
+      required
+      placeholder="Entrez le nom de l'élève">
+  </div>
+
+  <div class="col-12 col-md-6">
+    <input 
+      type="text" 
+      id="prenomEleve" 
+      name="Prenom" 
+      class="form-control bg-light text-dark border-0" 
+      ngModel 
+      required
+      placeholder="Entrez le prénom de l'élève">
+  </div>
+
+</div>
+        <div class="mt-4 text-end">
+         <button 
+  type="submit" 
+  class="btn fw-semibold px-4 container" 
+  [disabled]="form.invalid"
+  style="background-color: black; color: white; border-radius: 8px;">
+  Rechercher
+</button>
+        </div>
+
+        <div *ngIf="!loading && eleveTrouve.length === 0 && rechercheEffectuee" class="alert alert-warning mt-3 text-center">
+          Aucun élève trouvé.
+        </div>
+      </fieldset>
+
+      <br><br>
+
+      <h3 class="text-center mt-4 text-dark fw-bold" *ngIf="eleveTrouve.length > 0">
+  Résultats trouvés
+</h3>
+
+      <!-- <div class="row g-2 align-items-center mb-3" *ngIf="eleveTrouve.length > 0">
+        <div class="col-lg-8 col-md-8 col-12">
+          <input type="text" class="form-control shadow-sm border-0" name="Recherche" ngModel placeholder="🔍 Rechercher un élève..." />
+        </div>
+        <div class="col-lg-4 col-md-4 col-12 text-end">
+          <button class="btn btn-search w-100 fw-bold">Rechercher</button>
+        </div>
+      </div> -->
+
+      <div class="d-flex justify-content-center mt-5" *ngIf="loading">
+        <div class="spinner-border text-danger" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+
+      <!-- Tableau visible uniquement sur les écrans lg et plus -->
+      <div class="d-none d-lg-block table-container mt-4 shadow-lg rounded"
+     style="max-height: 70vh; overflow: auto;">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle text-nowrap"
+           style="min-width: 1100px;">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Matricule</th>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <!-- <th>Date Naissance</th> -->
+          <th>Lieu Naissance</th>
+          <th>Établissement</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <tr *ngFor="let eleve of eleveTrouve">
+          <td>{{ eleve.Metricule }}</td>
+          <td>{{ eleve.Nom }}</td>
+          <td>{{ eleve.Prenom }}</td>
+          <!-- <td>{{ eleve.DateNaissance }}</td> -->
+          <td>{{ eleve.LieuNaissance }}</td>
+          <td>{{ eleve.Etablissement }}</td>
+          <td>
+            <button class="btn btn-dark btn-sm" (click)="openDialog(eleve)">
+              ✔ Sélectionner
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+      <!-- mobile -->
+      <div class="zone_repete mt-5 w-100 mx-auto d-block d-lg-none d-md-none" *ngIf="eleveTrouve.length > 0">
+        
+        <div class="row row-cols-lg-4 row-cols-md-3 mx-auto">
+          
+          <div class="mb-sm-0 btn p-2" *ngFor="let eleve of eleveTrouve">
+            <div class="card shadow" style="text-align: start; background-color: red; color: #000000;"  (click)="openDialog(eleve)" >
+              <div class="p-2">
+                <p class="d-none">Matricule : <span>{{ eleve.Metricule }}</span></p>
+                <h1><span>{{ eleve.Nom }} {{ eleve.Prenom }}</span></h1>
+                <p>Date de naissance : <span>{{ eleve.DateNaissance }}</span></p>
+                <p>Lieu de naissance : <span style="color: #ffffff;">{{ eleve.LieuNaissance }}</span></p>
+              </div>
+              <td>
+                <button class="btn form-control" (click)="openDialog(eleve)" style="background-color: black; color: #ffffff;">Sélectionner</button>
+              </td>
             </div>
-
-            <div>
-                <div>
-                    <label for="disabledSelect" class="form-label mt-3" style="font-size: 15px;">Entrez un seul nom de l'élève à rechercher</label>
-                    <div class="input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping">#</span>
-                        <input type="text" class="form-control" name="Nom" ngModel placeholder="Entrez le nom de l'eleve" aria-label="Username" aria-describedby="addon-wrapping">
-                    </div>
-                </div>
-                <!-- <div class="col-2"></div> -->
-                <div>
-                    <label for="disabledSelect" class="form-label mt-3" style="font-size: 15px;">Entrez un seul prénom de l'élève à rechercher</label>
-                    <div class="input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping">#</span>
-                        <input type="text" class="form-control" name="Prenom" ngModel placeholder="Entrez le prenom de l'eleve" aria-label="Username" aria-describedby="addon-wrapping">
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-lg-flex d-md-flex d-block mt-4">
-                <p class="col-12 col-lg-4 col-md-4">
-                    <button type="submit" class=" btn btn-success btnRecherche ">Rechercher</button>
-                </p>
-                <p class="col-lg-8 col-md-8 col-12" *ngIf="this.eleveTrouve.length > 0">
-                    <input type="text" class="form-control" name="Recherche" ngModel placeholder="Recherche...">
-                </p>
-            </div>
-
-            <div class="d-flex justify-content-center mt-5" *ngIf="loading">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-
-            <div class="tableau mt-3 hover d-none d-lg-block d-md-block" *ngIf="this.eleveTrouve.length > 0">
-                <table class="table table-striped mt-3 table-hover">
-                    <thead>
-                        <tr>
-                          <th scope="col">Metricule</th>
-                          <th scope="col">Nom</th>
-                          <th scope="col">Prenom</th>
-                          <th scope="col">DateNaissance</th>
-                          <th scope="col">LieuNaissance</th>
-                          <th scope="col">Classe</th>
-                          <th scope="col">Etablissement</th>
-                          <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let eleve of eleveTrouve">
-                          <td>{{eleve.Metricule}}</td>
-                          <td>{{eleve.Nom}}</td>
-                          <td>{{eleve.Prenom}}</td>
-                          <th scope="row">{{eleve.DateNaissance}}</th>
-                          <td>{{eleve.LieuNaissance}}</td>
-                          <td>{{eleve.Classe}}</td>
-                          <td>{{eleve.Etablissement}}</td>
-                          <td>
-                            <!-- <button class="btn" style="color: #fff;" (click)="pageValiderPaiement(eleve)">Selectionner</button> -->
-                            <button class="btn" style="color: #fff;" (click)="openDialog(eleve)">Selectionner</button>
-                          </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> 
-
-            <!-- mobile -->
-            <div class="zone_repete mt-5 w-100 mx-auto d-block d-lg-none d-md-none" *ngIf="this.eleveTrouve.length > 0">
-                <div class="row row-cols-lg-4 row-cols-md-3 mx-auto ">
-                    <div class="mb-sm-0 btn p-2" *ngFor="let eleve of eleveTrouve">
-                        <div class="card shadow" style="text-align: start;">
-                            <div class="p-2">
-                                <p class="d-none">Matricule : <span class="text-primary">{{eleve.Metricule}}</span></p>
-                                <h1><span class="text-primary">{{eleve.Nom}}</span></h1>
-                                <p>Prenom : <span class="text-primary">{{eleve.Prenom}}</span></p>
-                                <p>Date de naissance : <span class="text-primary">{{eleve.DateNaissance}}</span></p>
-                                <p>Lieu de naissance : <span class="text-primary">{{eleve.LieuNaissance}}</span></p>
-                                <p>Classe : <span class="text-primary"></span>{{eleve.Classe}}</p>
-                            </div>
-                            <td>
-                                <button class="btn btn-primary form-control" (click)="openDialog(eleve)">Selectionner</button>
-                            </td>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
 </section>

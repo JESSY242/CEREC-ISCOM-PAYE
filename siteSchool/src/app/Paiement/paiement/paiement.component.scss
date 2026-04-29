@@ -13,7 +13,7 @@
 
 //  tableau
 .section form fieldset .tableau{
-    overflow-y: hidden; 
+    overflow-y: scroll; 
     height: 50vh;
 }
 .section form fieldset fieldset legend{
@@ -34,4 +34,119 @@
 .section form fieldset .zone_repete{
     height: 100vh;
     overflow-y: scroll;
+}
+.table-header {
+  background-color: #b30000;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #ffe5e5;
+  transition: background-color 0.3s ease;
+}
+
+.table th, .table td {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.btn-search {
+  background-color: #111;
+  color: #fff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-search:hover {
+  background-color: #b30000;
+  color: #fff;
+  transform: scale(1.02);
+}
+
+.btn-select {
+  background-color: #111;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 13px;
+}
+
+.btn-select:hover {
+  background-color: #b30000;
+  transform: scale(1.05);
+}
+
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+span {
+  color: #fff;
+}
+.table-header {
+  background-color: #f9f9f9;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid #dee2e6;
+
+  th {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.table td,
+.table th {
+  vertical-align: middle;
+  white-space: normal !important;
+  word-break: break-word;
+}
+.ecole-card {
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ecole-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.header-red {
+  background: linear-gradient(135deg, #b71c1c, #e53935);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.card-body {
+  background-color: #ffffff;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
 }

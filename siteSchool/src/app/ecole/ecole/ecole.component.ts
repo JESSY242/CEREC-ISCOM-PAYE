@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { EcoleService } from 'src/app/service/ecole.service';
 import { Iecole } from 'src/app/model/ecole';
 import { Router } from '@angular/router';
-import { ErreurGlobalService } from 'src/app/service/erreur-global.service';
 
 @Component({
   selector: 'app-ecole',
@@ -16,8 +15,7 @@ export class EcoleComponent {
 
   constructor(
     private service: EcoleService,
-    private router: Router,
-    private statutsErreur: ErreurGlobalService
+    private router: Router
   ){}
   ngOnInit(){
     this.getEcoleAll()
@@ -29,8 +27,6 @@ export class EcoleComponent {
       console.log(data);
       this.ecoles = data
       this.loading = false
-    },(Error)=>{
-      this.statutsErreur.statuErreur(Error)
     })
   }
 
@@ -40,16 +36,16 @@ export class EcoleComponent {
   }
 
   get recherches() {
-  const terme = this.recherche.toLocaleLowerCase(); // normalisation du terme de recherche
+  const rechercheLower = this.recherche?.toLowerCase() || '';
+
   return this.ecoles.filter((elem: Iecole) => {
     return (
-      elem.CodeEtab.toLocaleLowerCase().includes(terme) ||
-      elem.NomEtab.toLocaleLowerCase().includes(terme) ||
-      elem.Ville.toLocaleLowerCase().includes(terme)
+      elem.CodeEtab.toLowerCase().includes(rechercheLower) ||
+      elem.NomEtab.toLowerCase().includes(rechercheLower) ||
+      elem.Ville.toLowerCase().includes(rechercheLower)
     );
   });
 }
-
 
 
 

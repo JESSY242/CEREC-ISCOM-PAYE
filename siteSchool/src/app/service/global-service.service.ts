@@ -34,7 +34,9 @@ export class GlobalServiceService {
 
     return new HttpHeaders({...header})
   }
-   getCodeEcole(): string {
+  
+  getCodeEcole(): string {
   return this.codeEcole;
 }
+
 }
