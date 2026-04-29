@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #0d47a1, #1d3029);
+  background-color: blue;
 }
 
 .login-box {
@@ -49,5 +49,7 @@ button {
 }
 
 button:hover {
-  background-color: #ff7b4f;
+  background-color: #ffffff;
+  color: #0d47a1;
+  border:  1px solid blue;
 }
